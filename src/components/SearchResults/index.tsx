@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { useRouter } from 'next/router';
 import { SearchResult } from '@/types/SearchResult';
 import { SearchResponse } from '@/types/SearchResponse';
@@ -15,15 +15,16 @@ type Props = {
 
 function SearchResults ({ searchResponse }: Props) {
   const router = useRouter();
+  const listRef = useRef<any>();
   const { totalElements = 0 } = searchResponse ?? {};
   const [loadedResults, setLoadedResults] = useState<SearchResult[]>([]);
   const [continuationToken, setContinuationToken] = useState<string | undefined>();
 
   useEffect(() => {
     setLoadedResults(searchResponse?.results ?? []);
-  }, [router.asPath]);
-  useEffect(() => {
     setContinuationToken(searchResponse?.continuationToken);
+    listRef.current?.forceUpdateGrid?.();
+    listRef.current?.scrollToRow?.(0);
   }, [router.asPath]);
 
   const loadMoreRows = useCallback((params: IndexRange) => {
@@ -86,7 +87,7 @@ function SearchResults ({ searchResponse }: Props) {
           )}
       </div>
     );
-  }, [isRowLoaded]);
+  }, [loadedResults]);
 
   return (
     <div className="w-full flex flex-1">
@@ -97,9 +98,9 @@ function SearchResults ({ searchResponse }: Props) {
             loadMoreRows={loadMoreRows}
             rowCount={totalElements}
           >
-            {({ onRowsRendered, registerChild }) => (
+            {({ onRowsRendered }) => (
               <List
-                ref={registerChild}
+                ref={listRef}
                 width={width}
                 height={height}
                 rowHeight={width * 0.3}
