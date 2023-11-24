@@ -10,11 +10,11 @@ html {
 html {
   color: rgb(0, 0, 0);
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(255, 255, 255)
-    )
-    rgb(214, 219, 220);
+          to bottom,
+          transparent,
+          rgb(255, 255, 255)
+  )
+  rgb(214, 219, 220);
 }
 
 html *, html ::before, ::after {
@@ -24,11 +24,11 @@ html *, html ::before, ::after {
 html.dark {
   color: rgb(255, 255, 255);
   background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(28, 35, 43)
-    )
-    rgb(20, 25, 31);
+          to bottom,
+          transparent,
+          rgb(28, 35, 43)
+  )
+  rgb(20, 25, 31);
 }
 
 html.dark *, html.dark ::before, ::after {
@@ -44,4 +44,34 @@ html.dark *, html.dark ::before, ::after {
     after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10
     after:dark:from-sky-900 after:dark:via-[#0141ff]/40;
   }
+}
+
+.main-logo {
+  translate: -50%;
+}
+
+.bounce {
+  animation: bounce-in-right, bounce;
+  animation-duration: 2s, 2s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1, infinite;
+  animation-delay: 0s, 2s;
+}
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% {transform: translateY(0);}
+  40% {transform: translateY(-30px);}
+  60% {transform: translateY(-15px);}
+}
+
+@keyframes bounce-in-right {
+  0% {
+    opacity: 0;
+    transform: translateX(2000px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateX(-30px);
+  }
+  80% { transform: translateX(10px); }
+  100% { transform: translateX(0); }
 }
