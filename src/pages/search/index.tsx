@@ -9,6 +9,7 @@ import snakeCase from 'lodash/snakeCase';
 const { searchVideos } = apiResolver();
 
 const SearchFilters = lazy(() => import('@/components/SearchFilters'));
+const FoundChannels = lazy(() => import('@/components/FoundChannels'));
 const SearchResults = lazy(() => import('@/components/SearchResults'));
 
 type Props = {
@@ -21,6 +22,7 @@ export default function Search ({ searchRequest, searchResponse }: Props) {
     <div className="flex flex-1 flex-col items-center justify-between gap-y-4 pt-4 px-4 w-[min(100%,960px)]">
       <Suspense>
         <SearchFilters searchRequest={searchRequest}/>
+        <FoundChannels channels={searchResponse?.channels} />
         <SearchResults searchResponse={searchResponse}/>
       </Suspense>
     </div>

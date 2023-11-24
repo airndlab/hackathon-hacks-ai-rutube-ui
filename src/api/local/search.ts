@@ -1,10 +1,12 @@
 import axios from 'axios';
 import { SearchRequest } from '@/types/SearchRequest';
 import { SearchResponse } from '@/types/SearchResponse';
+import { SearchResult } from '@/types/SearchResult';
+import { FoundChannel } from '@/types/FoundChannel';
 import { STATIC_YOUTUBE_REQUEST_BODY_PART, STATIC_YOUTUBE_REQUEST_URL } from '@/constants';
-import isEmpty from 'lodash/isEmpty';
+import startsWith from 'lodash/startsWith';
 import isFinite from 'lodash/isFinite';
-import map from 'lodash/map';
+import forEach from 'lodash/forEach';
 
 export default function (searchRequest: SearchRequest): Promise<SearchResponse> {
   return axios.post(STATIC_YOUTUBE_REQUEST_URL, {
@@ -25,15 +27,35 @@ export default function (searchRequest: SearchRequest): Promise<SearchResponse> 
       }
     } catch (e) {}
 
+    const videos: SearchResult[] = [];
+    const channels: FoundChannel[] = [];
+
+    forEach(itemSectionRenderer?.contents, (answer) => {
+      if (answer?.videoRenderer?.title) {
+        videos.push({
+          title: answer?.videoRenderer?.title?.runs?.[0].text,
+          img: answer?.videoRenderer?.thumbnail?.thumbnails?.[0]?.url,
+          link: `https://www.youtube.com/watch?v=${answer?.videoRenderer?.videoId}`,
+          publishedDateText: answer?.videoRenderer?.publishedTimeText?.simpleText ?? '',
+          viewCountText: answer?.videoRenderer?.shortViewCountText?.simpleText ?? '',
+          lengthText: answer?.videoRenderer?.lengthText?.simpleText ?? '',
+        });
+      }
+      if (answer?.channelRenderer?.title) {
+        const thumbnail = answer?.channelRenderer?.thumbnail?.thumbnails?.[0]?.url;
+
+        channels.push({
+          title: answer?.channelRenderer?.title?.simpleText,
+          img: startsWith(thumbnail, 'http') ? thumbnail : `https:${thumbnail}`,
+          link: `https://www.youtube.com${answer?.channelRenderer?.navigationEndpoint?.browseEndpoint?.canonicalBaseUrl}`,
+          canonicalBaseUrl: answer?.channelRenderer?.navigationEndpoint?.browseEndpoint?.canonicalBaseUrl,
+        });
+      }
+    });
+
     return {
-      results: map(itemSectionRenderer?.contents, (answer) => ({
-        title: answer?.videoRenderer?.title?.runs?.[0].text,
-        img: answer?.videoRenderer?.thumbnail?.thumbnails?.[0]?.url,
-        link: `https://www.youtube.com/watch?v=${answer?.videoRenderer?.videoId}`,
-        publishedDateText: answer?.videoRenderer?.publishedTimeText?.simpleText ?? '',
-        viewCountText: answer?.videoRenderer?.shortViewCountText?.simpleText ?? '',
-        lengthText: answer?.videoRenderer?.lengthText?.simpleText ?? '',
-      })).filter(answer => !isEmpty(answer.title)),
+      channels,
+      results: videos,
       totalElements,
       continuationToken,
     };

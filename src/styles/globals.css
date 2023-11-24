@@ -10,11 +10,11 @@ html {
 html {
   color: rgb(0, 0, 0);
   background: linear-gradient(
-          to bottom,
-          transparent,
-          rgb(255, 255, 255)
-  )
-  rgb(214, 219, 220);
+      to bottom,
+      transparent,
+      rgb(255, 255, 255)
+    )
+    rgb(214, 219, 220);
 }
 
 html *, html ::before, ::after {
@@ -24,11 +24,11 @@ html *, html ::before, ::after {
 html.dark {
   color: rgb(255, 255, 255);
   background: linear-gradient(
-          to bottom,
-          transparent,
-          rgb(28, 35, 43)
-  )
-  rgb(20, 25, 31);
+      to bottom,
+      transparent,
+      rgb(28, 35, 43)
+    )
+    rgb(20, 25, 31);
 }
 
 html.dark *, html.dark ::before, ::after {
