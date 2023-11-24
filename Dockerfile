@@ -16,6 +16,14 @@ COPY ./public ./public
 RUN mkdir .next
 RUN chown nextjs:nodejs .next
 
+# Create temp storage
+RUN echo "{}" > SESSION_USER_STORAGE.json
+RUN chown nextjs:nodejs SESSION_USER_STORAGE.json
+RUN echo "{}" > SESSION_QUERY_STORAGE.json
+RUN chown nextjs:nodejs SESSION_QUERY_STORAGE.json
+RUN echo "{}" > USER_QUERY_STORAGE.json
+RUN chown nextjs:nodejs USER_QUERY_STORAGE.json
+
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
 COPY --chown=nextjs:nodejs /.next/standalone ./

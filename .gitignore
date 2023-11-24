@@ -23,7 +23,6 @@
 .DS_Store
 .idea
 *.pem
-*.iml
 
 # debug
 npm-debug.log*
@@ -39,3 +38,8 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# tmp storage
+SESSION_QUERY_STORAGE.json
+SESSION_USER_STORAGE.json
+USER_QUERY_STORAGE.json

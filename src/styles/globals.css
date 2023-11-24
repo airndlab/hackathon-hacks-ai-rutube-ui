@@ -2,26 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+html {
+  width: 100%;
+  scrollbar-gutter: stable;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
+html {
+  color: rgb(0, 0, 0);
   background: linear-gradient(
       to bottom,
       transparent,
-      rgb(var(--background-end-rgb))
+      rgb(255, 255, 255)
     )
-    rgb(var(--background-start-rgb));
+    rgb(214, 219, 220);
+}
+
+html *, html ::before, ::after {
+  border-color: #e5e7eb;
+}
+
+html.dark {
+  color: rgb(255, 255, 255);
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(28, 35, 43)
+    )
+    rgb(20, 25, 31);
+}
+
+html.dark *, html.dark ::before, ::after {
+  border-color: #444446;
+}
+
+@layer components {
+  .main-bg {
+    @apply relative mt-auto flex place-items-center before:absolute before:w-[30vw] before:-translate-x-1/2
+    before:rounded-full before:bg-gradient-radial before:from-white before:to-transparent before:blur-2xl
+    before:content-[''] after:absolute after:-z-20 after:h-[15vh] after:w-[10vw] after:bottom-[30px]
+    after:translate-x-1/3 after:bg-gradient-conic after:from-sky-200 after:via-blue-200 after:blur-2xl
+    after:content-[''] before:dark:bg-gradient-to-br before:dark:from-transparent before:dark:to-blue-700/10
+    after:dark:from-sky-900 after:dark:via-[#0141ff]/40;
+  }
 }
