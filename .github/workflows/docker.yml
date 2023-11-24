@@ -70,14 +70,3 @@ jobs:
           push: true
           tags: ${{ steps.meta.outputs.tags }}
           labels: ${{ steps.meta.outputs.labels }}
-
-      - name: Login to Yandex Cloud Container Registry
-        uses: yc-actions/yc-cr-login@v1
-        with:
-          yc-sa-json-credentials: ${{ secrets.YC_SERVICE_ACCOUNT_KEY_FILE }}
-
-      - name: Tag and push to Yandex Cloud Container Registry
-        run: |
-          docker pull ${{ env.IMAGE }}
-          docker tag ${{ env.IMAGE }} ${{ env.YCR_IMAGE }}
-          docker push ${{ env.YCR_IMAGE }}
