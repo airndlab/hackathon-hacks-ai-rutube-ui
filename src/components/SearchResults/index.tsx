@@ -1,10 +1,11 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { SearchResult } from '@/types/SearchResult';
 import { SearchResponse } from '@/types/SearchResponse';
 import { AutoSizer, Index, IndexRange, InfiniteLoader, List } from 'react-virtualized';
+import { ListRowProps } from 'react-virtualized/dist/es/List';
 import apiResolver from '@/api';
 import isEmpty from 'lodash/isEmpty';
-import { ListRowProps } from 'react-virtualized/dist/es/List';
 
 const { searchMoreVideos } = apiResolver();
 
@@ -13,9 +14,17 @@ type Props = {
 }
 
 function SearchResults ({ searchResponse }: Props) {
+  const router = useRouter();
   const { totalElements = 0 } = searchResponse ?? {};
-  const [loadedResults, setLoadedResults] = useState<SearchResult[]>(searchResponse?.results ?? []);
-  const [continuationToken, setContinuationToken] = useState<string | undefined>(searchResponse?.continuationToken);
+  const [loadedResults, setLoadedResults] = useState<SearchResult[]>([]);
+  const [continuationToken, setContinuationToken] = useState<string | undefined>();
+
+  useEffect(() => {
+    setLoadedResults(searchResponse?.results ?? []);
+  }, [router.asPath]);
+  useEffect(() => {
+    setContinuationToken(searchResponse?.continuationToken);
+  }, [router.asPath]);
 
   const loadMoreRows = useCallback((params: IndexRange) => {
     return searchMoreVideos({
@@ -28,7 +37,9 @@ function SearchResults ({ searchResponse }: Props) {
         ...prevState,
         ...res.results,
       ]));
-      setContinuationToken(res.continuationToken);
+      if (!isEmpty(res.continuationToken)) {
+        setContinuationToken(res.continuationToken);
+      }
     });
   }, [continuationToken]);
 
