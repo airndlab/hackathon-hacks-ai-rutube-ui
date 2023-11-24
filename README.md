@@ -49,13 +49,17 @@ Application works at two different modes depending on `env`:
 
 1. if environment variable named `NEXT_PUBLIC_BACKEND_HOST` exists, then application sends next requests at that host:
     1. `GET NEXT_PUBLIC_BACKEND_HOST/suggests/query`, where `query` is any user search query that needs suggestions for
-       search autocomplete. Application awaits as a response list of objects of type SearchSuggest like this:
-       `{ title: string, type: 'FROM_HISTORY' | 'FROM_SEARCH'}`, where%
+       search autocomplete. Application awaits as a response list of objects of
+       type [SearchSuggest](https://github.com/airndlab/hackathon-hacks-ai-rutube-ui/blob/main/src/types/SearchSuggest.ts)
+       like this:
+       `{ title: string, type: 'FROM_HISTORY' | 'FROM_SEARCH'}`, where:
         1. `title` is a suggestion itself
         2. `type` is a suggestion type - `'FROM_HISTORY'`, that means user already searched this, or `'FROM_SEARCH'`
            that means search engine suggest on users' query
-    2. `POST NEXT_PUBLIC_BACKEND_HOST/search`, as a body of request app sends object of type SearchRequest. Application
-       awaits as a response object of type SearchResponse
+    2. `POST NEXT_PUBLIC_BACKEND_HOST/search`, as a body of request app sends object of
+       type [SearchRequest](https://github.com/airndlab/hackathon-hacks-ai-rutube-ui/blob/main/src/types/SearchRequest.ts)
+       . Application awaits as a response object of
+       type [SearchResponse](https://github.com/airndlab/hackathon-hacks-ai-rutube-ui/blob/main/src/types/SearchResponse.ts)
     3. `POST NEXT_PUBLIC_BACKEND_HOST/searchMore`, almost the same method as previous (`search`), but used for loading
        more videos, relevant to search request, according to `startIndex` and `stopIndex` parameters of search request.
        They bound range of results need to be fetched like kinda sort of pagination but for infinite result list.
