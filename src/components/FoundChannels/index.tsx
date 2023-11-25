@@ -1,4 +1,5 @@
 import { FoundChannel } from '@/types/FoundChannel';
+import ImgOrStub from '@/components/ImgOrStub';
 import isEmpty from 'lodash/isEmpty';
 import map from 'lodash/map';
 
@@ -15,14 +16,14 @@ function FoundChannels ({ channels }: Props) {
           <a
             key={`${idx}_${channel.title}`}
             target="_blank"
-            href={channel.link}
+            href={channel.link ?? ''}
             className="flex items-center p-2 gap-4 cursor-pointer"
           >
             <div className="w-1/2 h-full flex">
-              <img
+              <ImgOrStub
                 alt={channel.title}
-                src={channel.img}
-                className="w-24 h-24 rounded-full m-auto"
+                imgSrc={channel.img}
+                className="w-24 h-24 rounded-full m-auto overflow-hidden"
               />
             </div>
             <div className="w-1/2">
