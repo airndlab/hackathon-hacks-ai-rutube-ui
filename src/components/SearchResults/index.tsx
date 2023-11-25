@@ -62,7 +62,7 @@ function SearchResults ({ searchResponse }: Props) {
   }, [loadedResults]);
 
   return (
-    <div className="w-full flex flex-1">
+    <div className="w-full flex flex-1 min-h-screen">
       <AutoSizer>
         {({ width, height }) => (
           <InfiniteLoader

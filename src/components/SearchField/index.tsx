@@ -1,15 +1,17 @@
-import React, {useCallback, useEffect, useRef, useState} from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import SearchSuggests from '@/components/SearchField/SearchSuggests';
-import apiResolver, {APIResolver} from '@/api';
-import {SearchSuggest} from '@/types/SearchSuggest';
-import {SearchIcon} from '@/components/Icons';
-import {useRouter} from 'next/router';
-import {getQueryParam, getUrlParamsString} from '@/utils';
+import apiResolver, { APIResolver } from '@/api';
+import { SearchSuggest } from '@/types/SearchSuggest';
+import { SearchIcon } from '@/components/Icons';
+import { useRouter } from 'next/router';
+import { getQueryParam, getUrlParamsString } from '@/utils';
+import searchSuggestsLocal from '@/api/local/searchSuggests';
+import searchSuggestsRemote from '@/api/remote/searchSuggests';
 import isEmpty from 'lodash/isEmpty';
 
-const { addHistory, deleteHistory, searchSuggests }: APIResolver = apiResolver();
+const { addHistory, deleteHistory }: APIResolver = apiResolver();
 
-function SearchField() {
+function SearchField () {
   const router = useRouter();
   const initialQuery: string = getQueryParam(router.query?.['query']);
   const [currentQuery, setCurrentQuery] = useState<string>('');
@@ -25,12 +27,23 @@ function SearchField() {
     }
   }, [suggests]);
 
-  const applyQuery = useCallback((query: string, isInitial: boolean) => {
+  const applyQuery = useCallback(async (query: string, isInitial: boolean) => {
     setCurrentQuery(query);
-    searchSuggests(query).then((response: SearchSuggest[]) => {
-      setSuggests(response);
-      setShowSuggests(!isInitial && !isEmpty(query) && !isEmpty(response));
-    });
+    let localSuggests: SearchSuggest[] = [];
+    let remoteSuggests: SearchSuggest[] = [];
+    try {
+      localSuggests = await searchSuggestsLocal(query);
+    } catch (e) {}
+    try {
+      remoteSuggests = await searchSuggestsRemote(query) as SearchSuggest[];
+    } catch (e) {}
+    const newSuggests = [
+      ...localSuggests,
+      ...remoteSuggests,
+    ];
+
+    setSuggests(newSuggests as SearchSuggest[]);
+    setShowSuggests(!isInitial && !isEmpty(query) && !isEmpty(newSuggests));
   }, []);
 
   const handleQueryChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
@@ -115,7 +128,7 @@ function SearchField() {
           : 'dark:text-sky-500 cursor-pointer'
         }`}
       >
-        <SearchIcon />
+        <SearchIcon/>
       </span>
       {showSuggests &&
         <SearchSuggests
