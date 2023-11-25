@@ -46,6 +46,7 @@ export default function (searchRequest: SearchRequest): Promise<SearchResponse> 
 
         channels.push({
           title: answer?.channelRenderer?.title?.simpleText,
+          type: 'Тип канала',
           img: startsWith(thumbnail, 'http') ? thumbnail : `https:${thumbnail}`,
           link: `https://www.youtube.com${answer?.channelRenderer?.navigationEndpoint?.browseEndpoint?.canonicalBaseUrl}`,
           canonicalBaseUrl: answer?.channelRenderer?.navigationEndpoint?.browseEndpoint?.canonicalBaseUrl,
