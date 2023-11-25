@@ -5,7 +5,7 @@ import { SearchResponse } from '@/types/SearchResponse';
 export default function (searchRequest: SearchRequest) {
   return axios.post<SearchResponse>(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/search`, {
     query: searchRequest.query,
-    size: 999,
+    size: 25,
     channels: 1,
   }).then((response) => {
     const results = response.data?.results ?? [];
