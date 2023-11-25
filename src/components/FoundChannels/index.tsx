@@ -33,7 +33,7 @@ function FoundChannels ({ channels }: Props) {
                 {channel.title}
               </p>
               <p className="break-words text-sm md:text-md text-gray-400 dark:text-white">
-                {channel.canonicalBaseUrl}
+                {channel.type}
               </p>
             </div>
           </a>
