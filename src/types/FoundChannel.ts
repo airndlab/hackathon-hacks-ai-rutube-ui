@@ -1,6 +1,6 @@
 export type FoundChannel = {
   title: string;
-  link: string;
+  link?: string;
   img?: string;
   canonicalBaseUrl?: string;
 };

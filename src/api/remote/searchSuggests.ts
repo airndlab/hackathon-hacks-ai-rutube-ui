@@ -1,7 +1,14 @@
 import axios from 'axios';
-import {SearchSuggest} from '@/types/SearchSuggest';
+import { SearchSuggest, SearchSuggestType } from '@/types/SearchSuggest';
+import map from 'lodash/map';
+import isEmpty from 'lodash/isEmpty';
 
-export default function(query: string) {
-  return axios.get<SearchSuggest[]>(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/suggests/${query}`)
-              .then((response) => response.data);
+export default function (query: string) {
+  return axios.get<SearchSuggest[]>(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/suggests/${query}?max_cost=3`).
+    then((response) => {
+      return map(response.data, (suggest: any): SearchSuggest => ({
+        title: suggest?.title?.[0] ?? '',
+        type: SearchSuggestType.FROM_SEARCH,
+      })).filter((suggest: SearchSuggest) => !isEmpty(suggest.title));
+    });
 }

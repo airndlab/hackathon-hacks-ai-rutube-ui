@@ -1,5 +1,5 @@
-import {CSSProperties, forwardRef, LegacyRef, useMemo} from 'react';
-import {SearchSuggest} from '@/types/SearchSuggest';
+import { CSSProperties, forwardRef, LegacyRef, useMemo } from 'react';
+import { SearchSuggest } from '@/types/SearchSuggest';
 import SuggestOption from '@/components/SearchField/SuggestOption';
 import map from 'lodash/map';
 
@@ -10,7 +10,7 @@ type Props = {
   removeSuggest: (suggest: SearchSuggest) => void;
 };
 
-function SearchSuggests({ suggests, width, selectSuggest, removeSuggest }: Props, ref: LegacyRef<HTMLDivElement>) {
+function SearchSuggests ({ suggests, width, selectSuggest, removeSuggest }: Props, ref: LegacyRef<HTMLDivElement>) {
   const style: CSSProperties | undefined = useMemo(() => ({
     width: width ?? '540px',
   }), [width]);
