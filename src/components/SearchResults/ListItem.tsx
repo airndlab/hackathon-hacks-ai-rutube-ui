@@ -12,6 +12,10 @@ function ListItem ({ video }: Props) {
   const [thumbnail, setThumbnail] = useState<string | undefined>(video.img);
 
   useEffect(() => {
+    setThumbnail(video.img);
+  }, [video.img]);
+
+  useEffect(() => {
     if (!isEmpty(video.id)) {
       axios.get(`https://rutube.ru/pangolin/api/web/video/${video.id}`).then((response) => {
         const videoInfo = response?.data?.result?.video;
